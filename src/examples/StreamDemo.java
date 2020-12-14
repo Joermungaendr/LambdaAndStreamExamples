@@ -87,7 +87,7 @@ public class StreamDemo {
     private static void parallelDetectSalariesWithoutStreamWithLamdas() {
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
         BlockingQueue<Double> blockingSalaries = new LinkedBlockingQueue<>();
-        List<Future<?>> futures = new LinkedList();
+        List<Future<?>> futures = new LinkedList<>();
         System.out.println(persons1000000.size());
         futures.add(executor.submit(() -> blockingSalaries.addAll(retrieveSalaries(persons1000000.subList(0, 249999)))));
         futures.add(executor.submit(() -> blockingSalaries.addAll(retrieveSalaries(persons1000000.subList(250000, 499999)))));
@@ -105,11 +105,12 @@ public class StreamDemo {
 
         salaries.sort((s1, s2) -> s1.compareTo(s2));
         System.out.println("All salaries of all persons whose names start with the letter 'H' ordered ascending: \n" + salaries);
+        executor.shutdown();
     }
 
     private static void parallelDetectSalariesWithoutStreamWithoutLamdas() {
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
-        List<Future<?>> futures = new LinkedList();
+        List<Future<?>> futures = new LinkedList<>();
         BlockingQueue<Double> blockingSalaries = new LinkedBlockingQueue<>();
         futures.add(executor.submit(new Runnable() {
             @Override
@@ -146,6 +147,7 @@ public class StreamDemo {
 
         salaries.sort((s1, s2) -> s1.compareTo(s2));
         System.out.println("All salaries of all persons whose names start with the letter 'H' ordered ascending: \n" + salaries);
+        executor.shutdown();
     }
 
     private static List<Double> retrieveSalaries(List<Person> persons) {
